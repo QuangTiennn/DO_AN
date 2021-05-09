@@ -9,6 +9,7 @@ var tourSchema = new mongoose.Schema({
     },
     avatarTour : {
         type : String,
+        default : ""
     },
     startAddress : {
         type : String,

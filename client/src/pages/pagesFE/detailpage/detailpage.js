@@ -122,7 +122,6 @@ class DetailPage extends Component {
 }
 
 const mapStateToProps = (state) => { //get all data from store
-    console.log(state, '[state]');
     return {
         login : state.login,
         detailTour : state.itemEditing,

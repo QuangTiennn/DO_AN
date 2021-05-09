@@ -15,9 +15,8 @@ module.exports.addToCart = async (req, res) => {
     let cart = new Cart(req.body);
     let userID = req.body.userID;
     let checkCartExiste = await Cart.findOne({userID});
-    console.log(checkCartExiste, '[checkCartExiste]');
     if(checkCartExiste) {
-        await Cart.findOneAndUpdate({userID}),{
+        await Cart.findOneAndUpdate({userID : userID}),{
             $push : {
                 tourInCart : cart.tourInCart
             }
