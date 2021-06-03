@@ -14,6 +14,7 @@ var userSchema =  new mongoose.Schema({
     },
     role : {
         type : String,
+        default : "member"
     },
     email : {
         type : String,

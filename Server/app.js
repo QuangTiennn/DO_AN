@@ -28,6 +28,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
+const verifyToken = require("./middleware/auth");
 mongoose.connect(process.env.MONGO_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -57,15 +58,15 @@ mongoose.connect(process.env.MONGO_URL,{
         res.render("index.html");
     });
 
-    app.use("/api", authRouter);
-    app.use("/api", cartRouter);
-    app.use("/api/tour", tourRouter);
-    app.use("/api/user",userRouter);
-    app.use("/api/transport", transportRouter);
-    app.use("/api/employee", employeeRouter);
-    app.use("/api/storages", storageRouter);
-    app.use("/api/chat/", chatRouter)
-    app.use("/api/customer/", customerRouter)
+    app.use("/api" ,authRouter);
+    app.use("/api",  verifyToken ,cartRouter);
+    app.use("/api/tour",  verifyToken ,tourRouter);
+    app.use("/api/user", verifyToken ,userRouter);
+    app.use("/api/transport",  verifyToken ,transportRouter);
+    app.use("/api/employee", verifyToken , employeeRouter);
+    app.use("/api/storages", verifyToken , storageRouter);
+    app.use("/api/chat/",  verifyToken ,chatRouter)
+    app.use("/api/customer/",  verifyToken ,customerRouter)
 
     
 

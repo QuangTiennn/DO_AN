@@ -16,8 +16,9 @@ module.exports.login = async (req, res)=> {
             code : 401
         })
     }
-    let accessToken = jwt.sign({name : user.userName}, 'accessToken', {expiresIn : '1h'});
-    let refreshToken = jwt.sign({name : user.userName},'refreshToken',{expiresIn: '7d'})
+    let accessToken = jwt.sign({id : user._id}, process.env.JWT_TOKEN_SECRET, {expiresIn : '1h'});
+    let refreshToken = jwt.sign({id : user._id}, process.env.JWT_TOKEN_SECRET,{expiresIn: '7d'})
+    const decode = jwt.verify(accessToken, process.env.JWT_TOKEN_SECRET);
     res.json({
         code : 200,
         expiresIn : 60*60,

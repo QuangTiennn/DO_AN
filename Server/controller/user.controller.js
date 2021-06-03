@@ -10,6 +10,12 @@ module.exports.getAllUser = async (req, res) => {
         })
 };
 
+module.exports.getMe = async (req, res) => {
+    const userID = req.decode.id;
+    const user  = await User.findOne({_id : userID});
+    console.log(user, '[user]');
+}
+
 module.exports.addUser = async (req, res) => {
     try {
         let user = new User(req.body);
