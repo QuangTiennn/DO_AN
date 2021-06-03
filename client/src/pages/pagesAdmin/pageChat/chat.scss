@@ -375,6 +375,7 @@ html {
 .chat-area {
  display: flex;
  flex-direction: column;
+ justify-content: space-between;
  overflow: auto;
  &-header {
   display: flex;

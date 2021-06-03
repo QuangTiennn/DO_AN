@@ -22,7 +22,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const [state, setState] = useState({ keyword: '', statusDropdown: false })
 
-  const { login: { isLogin, dataUserLogin } } = useSelector(cS => cS)
+  const { login: { isLogin, dataUserLogin, token } } = useSelector(cS => cS)
 
   const handleOnChangeInput = (e) => {
     setState({
@@ -39,7 +39,7 @@ const Header = () => {
   }
 
   const showMenu = () => {
-    if (dataUserLogin === null) {
+    if (!token) {
       return (
         <Link to="/login" className="dropdown-item has-icon text-danger">
           <i className="fas fa-sign-out-alt" />
@@ -60,7 +60,7 @@ const Header = () => {
   }
 
   const showUserIsLogin = (userIsLogin) => {
-    if (dataUserLogin === null) {
+    if (token) {
       return (
         <>
           Hi,
@@ -71,7 +71,8 @@ const Header = () => {
       <>
         <img
           alt="image1"
-          src={`${USER_IMG}/${dataUserLogin.user.avatarUser}`}
+          // src={`${USER_IMG}/${dataUserLogin.user.avatarUser}`}
+          src="https://picsum.photos/200"
           className="rounded-circle mr-1" />
         <div className="d-sm-none d-lg-inline-block">
           Hi,

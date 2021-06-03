@@ -4,3 +4,5 @@ export const ADD_MESSAGES = 'ADD_MESSAGES';
 
 export const CREATE_CHAT_ROOM = 'CREATE_CHAT_ROOM'
 export const GET_ALL = 'GET_ALL'
+
+export const SAVE_MESS = 'SAVE_MESS'

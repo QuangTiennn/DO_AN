@@ -8,6 +8,7 @@ export const actLogin = (dataUserLogin) => ({
 
 export const actLoginReq = (dataUserLogin) => (dispatch) => callApi('login', 'POST', dataUserLogin)
   .then((res) => {
+    console.log({res})
     dispatch(actLogin(res.data));
   });
 

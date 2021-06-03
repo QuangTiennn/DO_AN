@@ -126,8 +126,6 @@ const HomePage = () => {
     return result;
   }
 
-
-  if (!isLogin) return history.push('/login')
   return (
     <div>
       {/* <Header/> */}

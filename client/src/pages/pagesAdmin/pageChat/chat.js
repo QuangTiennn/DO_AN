@@ -1,88 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import io from 'socket.io-client';
-import { actFetchAllChatRoomReq } from '../../../actions/actChat';
-import { actionGetCurrentUser } from '../../../actions/actCurrentUser';
-import { USER_IMG } from '../../../constants/Service';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import ChatDetail from '../../pagesAdmin/pageChat/chatdetail';
 import './chat.scss';
-import ChatDetail from './chatdetail';
 
 
-const PageChat = ({ match }) => {
-  const dispatch = useDispatch();
+const PageChat = () => {
+  const { currentUserState: { currentUser: { chatRoomID } },
+    chatRoom: { messages } } = useSelector(currentState => currentState);
 
-  const [state, setState] = useState({
-    messageByChatRoomID: {
-      messageID: {
-        TimeSendMessage: '',
-        message: '',
-        nameRoom: '',
-
-      },
-      roomMaster: '',
-      userID: {
-        avatarUser: '',
-        email: '',
-        numberPhoneUser: '',
-        password: '',
-        userName: '',
-      },
-    },
-  })
-
-  const { chatRoom: { chatRooms }, login: { dataUserLogin: { user } }, currentUserState } = useSelector(currentState => currentState)
-
-
-
-  useEffect(() => {
-    dispatch(actFetchAllChatRoomReq())
-    dispatch(actionGetCurrentUser(user._id));
-  }, [dispatch, user])
-
-
-  console.log({ chatRooms })
 
   const renderListChat = () => {
-    let result = null;
-    // if (chatRooms.length > 0) {
-    //   result = chatRooms.map((item, idx) => {
-    //     if (item !== undefined) {
-    //       const result2 = item.map((val, idex) => {
-    //         if (val.userID !== null || undefined) {
-    //           return (
-    //             <Link
-    //               key={idex}
-    //               className="navLink"
-    //               to={`/admin/chat/${val._id}`}
-    //             >
-    //               <div className="msg online">
-    //                 <img
-    //                   className="msg-profile"
-    //                   src={`${USER_IMG}/${val.userID.avatarUser}`}
-    //                   alt=""
-    //                 />
-    //                 <div className="msg-detail">
-    //                   <div className="msg-username">
-    //                     {' '}
-    //                     {val.userID.userName}
-    //                     {' '}
-    //                   </div>
-    //                   <div className="msg-content">
-    //                     <span className="msg-message">zzzzzzzzzzz</span>
-    //                     {/* <span className="msg-date">20m</span> */}
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //             </Link>
-    //           );
-    //         }
-    //       });
-    //       return result2;
-    //     }
-    //   });
-    // }
-    return result;
+    <div>
+      <p>abc</p>
+    </div>
   }
   return (
     <div className="appChat">
@@ -109,7 +39,7 @@ const PageChat = ({ match }) => {
           {/* list user chat */}
           {renderListChat()}
         </div>
-        <ChatDetail match={match} />
+        <ChatDetail />
         <div className="detail-area">
           <div className="detail-area-header">
             <div className="msg-profile group">

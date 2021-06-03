@@ -12,14 +12,12 @@ class App extends Component {
     if (routes.length > 0) {
       result = routes.map((route, index) => (
         <Route
-          // eslint-disable-next-line react/no-array-index-key
           key={index}
           path={route.path}
           exact={route.exact}
           component={route.main}
         />
       ));
-      // return null
     }
     return result;
   }

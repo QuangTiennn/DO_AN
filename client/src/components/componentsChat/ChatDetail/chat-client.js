@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useContext, memo } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SocketContext } from '../../../context/socket';
+// import { SocketContext } from '../../../context/socket';
+import socketIOClient from "socket.io-client";
 
 import { actCreateChatRoomReq, actionGetAllMessageReq } from '../../../actions/actChat';
 import { actionGetCurrentUser } from '../../../actions/actCurrentUser';
 
-import { USER_IMG } from '../../../constants/Service';
 import './chat-client.scss';
 import { Button } from 'react-bootstrap';
+import { saveMessAction } from '../../../actions/saveMessAction';
+
+const ENDPOINT = 'http://localhost:9000';
 
 const ChatClient = () => {
   const dispatch = useDispatch();
@@ -19,29 +22,34 @@ const ChatClient = () => {
     userID: ''
   });
 
-
-  const socket = useContext(SocketContext);
+  // const socket = useContext(SocketContext);
 
   const { login: { isLogin, dataUserLogin = {} } } = useSelector(currentState => currentState);
-  const currentUserId = dataUserLogin.user._id
+  const currentUserId = dataUserLogin?.user?._id
 
   useEffect(() => {
     dispatch(actionGetAllMessageReq())
-  }, [dispatch]);
-
-  const { currentUserState: { currentUser: { chatRoomID } }, chatRoom: { messages } } = useSelector(currentState => currentState);
-  useEffect(() => {
     dispatch(actionGetCurrentUser(currentUserId));
 
-    //   // client take data from server
-    //   socket.on('newMessage-server-sent', (data) => {
-    //   });
+  }, [dispatch, currentUserId]);
 
-    //   // client send data to server
-    //   // socket.emit("newMessage-client-sent","hello")
-    //   dispatch(actFetchAllChatRoom());
-  }, [dispatch, currentUserId])
+  const {
+    login: { token },
+    currentUserState: { currentUser: { chatRoomID } },
+    currentUserState,
+    chatRoom: { messages },
+    messageTempState: { listMessages }
+  } = useSelector(currentState => currentState);
 
+  const socket = socketIOClient(ENDPOINT);
+
+  console.log({ currentUserState })
+
+  useEffect(() => {
+    socket.on('newMessage-server-sent', (arg) => {
+      dispatch(saveMessAction(arg))
+    });
+  }, [])
 
   const handleInputOnChange = (e) => {
     setState(cS => ({ ...cS, [e.target.name]: e.target.value }))
@@ -57,27 +65,15 @@ const ChatClient = () => {
     })
 
   }
-
   const handleButtonSendMessage = (e) => {
     e.preventDefault();
-    // const userID = dataUserLogin.user._id;
-    // const data = this.state.messageInput;
-    // if (data !== null && data !== undefined && data !== '') {
-    //   // emit message to sever
-    //   this.socket.emit('newMessage-client-sent', {
-    //     chatRoomID: '',
-    //     userID,
-    //     data,
-    //   });
-    //   this.state.myMessage.push(data);
-    //   this.setState({
-    //     messageInput: '',
-    //   });
-    // }
+    socket.emit("newMessage-client-sent", {
+      id: currentUserId,
+      message: state.messageInput
+    })
   }
 
-  console.log({ messages })
-  if (isLogin) {
+  if (token) {
     return (
       <>
         <div className="flexbox">
@@ -89,46 +85,89 @@ const ChatClient = () => {
               </h3>
             </div>
             {
-              !chatRoomID ? (
+              !chatRoomID && token ? (
                 <Button onClick={handleConnect} variant="secondary" className="text-dark fs-18">Chat now</Button>
               ) : (
                 <>
                   {/* chat body */}
                   <div id="chat_box_body" className="chat-box-body">
                     {
-                     messages && Object.keys(messages) && messages?.messages.map((mess) => {
+                      messages && Object.keys(messages) && messages?.messages.map((mess) => {
                         const { content, userID } = mess
-                        console.log(userID._id)
                         return (
-                          <>
+                          <div key={content}>
                             {
                               currentUserId === userID._id ? (
-                                <div className="client-mess profile my-profile">
+                                <div className="client-mess profile my-profile px-2">
                                   <div className="">
-                                    {/* <span>{dataUserLogin ? dataUserLogin.user.userName : ''}</span> */}
-                                    <span>{userID.userName}</span>
-                                    <img
-                                      src={`${USER_IMG}/${dataUserLogin ? dataUserLogin.user.avatarUser : ''}`}
-                                      width="30"
-                                      height="30"
-                                      alt=""
-                                    />
                                   </div>
-                                  <div className="message my-message"> {content} </div>
+                                  <div className="message my-message p-2 mb-2"
+                                    style={{
+                                      background: 'lightblue',
+                                      display: 'inline'
+                                    }}
+                                  > {content} </div>
                                 </div>
                               ) : (
-                                <div className="admin-mess">
+                                <div className="admin-mess text-right px-2 mb-3">
                                   <div className="profile other-profile">
-                                    <img src="https://i.pravatar.cc/30" width="30" height="30" alt="" />
-                                    <span>Admin</span>
+                                    {/* <img src="https://i.pravatar.cc/30"
+                                      style={{ borderRadius: '50%' }}
+                                      width="30" height="30" alt="" />
+                                    <span>Admin</span> */}
                                   </div>
-                                  <div className="message other-message" >{content}</div>
+                                  <div className="message other-message box-chat-admin text-white p-2"
+                                    style={{
+                                      background: 'gray',
+                                      display: 'inline'
+                                    }}
+                                  >{content}</div>
                                 </div>
                               )
                             }
 
 
-                          </>
+                          </div>
+                        )
+                      })
+                    }
+
+                    {
+                      listMessages && Object.keys(listMessages) && listMessages.map((mess) => {
+                        const { message, id } = mess
+                        return (
+                          <div key={id}>
+                            {
+                              currentUserId === id ? (
+                                <div className="client-mess profile my-profile px-2">
+                                  <div className="message my-message p-2 mb-2"
+                                    style={{
+                                      background: 'lightblue',
+                                      display: 'inline'
+                                    }}
+                                  > {message} </div>
+                                </div>
+                              ) : (
+                                <div className="admin-mess text-right px-2 mb-3">
+                                  <div className="profile other-profile">
+                                  </div>
+                                  {
+                                    message && (
+                                      <div className="message other-message box-chat-admin text-white p-2"
+                                        style={{
+                                          background: 'gray',
+                                          display: 'inline'
+                                        }}
+                                      >{message}</div>
+                                    )
+                                  }
+
+                                </div>
+                              )
+                            }
+
+
+                          </div>
                         )
                       })
                     }

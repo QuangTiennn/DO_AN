@@ -24,6 +24,8 @@ body {
   font-size: $font-size;
 }
 
+
+
 .flexbox {
   display: flex;
   justify-content: flex-end;
@@ -81,9 +83,10 @@ body {
         background-color: #006ae3;
         align-self: flex-end;
       }
-      .other-message {
-        background-color: #e2e2e2;
-      }
+      .other-message{
+          background: 'red';
+          border-radius: 4px;
+        }
       .profile {
         margin: 2px 0;
         overflow: hidden;

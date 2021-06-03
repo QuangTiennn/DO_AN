@@ -9,6 +9,5 @@ export const actGetCurrentUser = (payload) => ({
 
 export const actionGetCurrentUser = (id) => (dispatch) => callApi(`user/get-userID/${id}`, 'GET')
   .then((res) => {
-    console.log(res.data)
     dispatch(actGetCurrentUser(res.data));
   });

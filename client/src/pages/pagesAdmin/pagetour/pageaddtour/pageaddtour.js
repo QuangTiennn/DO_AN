@@ -27,6 +27,7 @@ const PageAddTour = () => {
     qtyPeople: 20000,
     descriptionTour: 'lorem ipsum ipsum ipsum',
     detailTour: 'lorem ipsum ipsum ipsum',
+    avatarTour: '121241321_670001800616075_329923169218267049_o.jpg'
   }
 
   const handleChangeText = (value) => {

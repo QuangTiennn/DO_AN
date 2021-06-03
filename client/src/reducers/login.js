@@ -1,23 +1,19 @@
-import storage from 'redux-persist/lib/storage';
-import { persistReducer } from 'redux-persist';
 import * as TypesLogin from '../constants/ActionTypeLogin';
 
 const initialState = {
   isLogin: false,
   dataUserLogin: null,
+  token: !!localStorage.getItem('token')
+
 };
-const persistConfig = {
-  key: 'login', // key localstorega
-  storage,
-  blacklist: [], // k bi thay doi hoac k dua va localstorage
-};
-const Login = (state = initialState, action) => {
+
+const LoginReducer = (state = initialState, action) => {
   switch (action.type) {
     case TypesLogin.USER_LOGIN:
       if (action.dataUserLogin.code === 200) {
+        localStorage.setItem('token', action.payload.accessToken);
         state.isLogin = true;
         state.dataUserLogin = action.dataUserLogin;
-        // localStorage.setItem("login", JSON.stringify(state));
       }
       return { ...state };
     case TypesLogin.USER_REGISTER:
@@ -26,4 +22,4 @@ const Login = (state = initialState, action) => {
   }
 };
 
-export default persistReducer(persistConfig, Login);
+export default LoginReducer

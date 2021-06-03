@@ -22,7 +22,8 @@ class MessageItem extends Component {
           <span>{this.props.userIsLogging.dataUserLogin ? this.props.userIsLogging.dataUserLogin.user.userName : ''}</span>
           <img
             alt=""
-            src={`${USER_IMG}/${this.props.userIsLogging.dataUserLogin ? this.props.userIsLogging.dataUserLogin.user.avatarUser : ''}`}
+            // src={`${USER_IMG}/${this.props.userIsLogging.dataUserLogin ? this.props.userIsLogging.dataUserLogin.user.avatarUser : ''}`}
+            src="https://picsum.photos/200"
             width="30"
             height="30"
           />

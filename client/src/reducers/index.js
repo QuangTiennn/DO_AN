@@ -9,6 +9,7 @@ import chatRoom from './chat';
 import customer from './customer';
 import detailTourReducer from './detailTour';
 import currentUser from './currentUser';
+import messTempReducer from './messTemp';
 
 const appReducers = combineReducers({
   tour,
@@ -20,7 +21,8 @@ const appReducers = combineReducers({
   chatRoom,
   customer,
   tourState: detailTourReducer,
-  currentUserState: currentUser
+  currentUserState: currentUser,
+  messageTempState: messTempReducer
 });
 
 export default appReducers;
