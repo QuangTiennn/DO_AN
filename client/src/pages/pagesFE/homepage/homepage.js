@@ -11,11 +11,11 @@ import 'swiper/components/scrollbar/scrollbar.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import { actFetchToursReq } from '../../../actions/actTour';
+import { getMeRequest } from '../../../actions/actLogin';
 import AppNotFound from '../../../components/AppNotFound';
-import { TOUR_IMG } from '../../../constants/Service';
+import { USER_IMG } from '../../../constants/Service';
 import { history } from '../../../store';
 import './homepage.scss';
-
 
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay]);
@@ -26,10 +26,11 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const [state, setState] = useState({ isOpenSlide: false, })
 
-  const { login: { isLogin }, tour: { listTour } } = useSelector(cS => cS)
+  const { login: { isLogin, profile }, tour: { listTour } } = useSelector(cS => cS)
 
   useEffect(() => {
     dispatch(actFetchToursReq())
+    dispatch(getMeRequest())
   }, [dispatch]);
 
   const renderSlide = () => (
@@ -53,6 +54,7 @@ const HomePage = () => {
       newItems.push(items[idx]);
       items.splice(idx, 1);
     }
+      // eslint-disable-next-line no-console
     if (newItems !== undefined) {
       result = newItems.map((item, idx) => {
         if (item !== null && item !== undefined) {
@@ -61,7 +63,7 @@ const HomePage = () => {
               <div className="destination-item">
                 <div className="img-destination-item">
                   <NavLink to={`/detail-tour/${item._id}`}>
-                    <img src={`${TOUR_IMG}/${item.avatarTour}`} alt="" />
+                    <img src={`${USER_IMG}/${item.avatar}`} alt="" />
                   </NavLink>
                 </div>
                 <div className="title-destination-item">
@@ -90,7 +92,7 @@ const HomePage = () => {
               <div className="our-tour-item">
                 <div className="img-tour-item">
                   <NavLink className="navLink" to={`/detail-tour/${tour._id}`}>
-                    <img src={`${TOUR_IMG}/${tour.avatarTour}`} alt="" />
+                    <img src={`${USER_IMG}/${tour.avatar}`} alt="" />
                   </NavLink>
                 </div>
                 <div className="name-tour">

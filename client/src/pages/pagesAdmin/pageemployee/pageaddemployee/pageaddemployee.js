@@ -109,7 +109,6 @@ class PageAddEmployee extends Component {
 
                 onSubmit={
                                 (values) => {
-                                  console.log(values);
                                 }
                             }
               >

@@ -1,4 +1,5 @@
 import * as TypesCart from '../constants/ActionCart';
+import { Toastify } from '../utils/toastify'
 
 const data = JSON.parse(localStorage.getItem('CART'));
 const initialState = data || [];
@@ -43,6 +44,12 @@ const Cart = (state = initialState, action) => {
         state[index].quantity = quantity;
       }
       localStorage.setItem('CART', JSON.stringify(state));
+      return [...state];
+    }
+
+    case TypesCart.BOOKING: {
+      Toastify({ msg: 'Booking tour successfully', type: 'success' });
+
       return [...state];
     }
     default: return [...state];

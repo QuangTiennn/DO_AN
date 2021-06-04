@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './pageLogin.scss';
-import { actLoginReq } from '../../../actions/actLogin';
+import { actLoginReq, getMeRequest } from '../../../actions/actLogin';
+import { history } from '../../../store';
 
 class PageLogin extends Component {
   constructor (props) {
@@ -13,6 +14,10 @@ class PageLogin extends Component {
       txt_password: '',
       isLogin: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.onGetMe();
   }
 
   componentDidUpdate(preProps, preState) {
@@ -34,6 +39,7 @@ class PageLogin extends Component {
   onSubmitFormLogin = (e) => {
     e.preventDefault();
     this.props.onLogin(this.state);
+    history.push('/');
   }
 
   handleValidation = (valid) => {
@@ -46,6 +52,7 @@ class PageLogin extends Component {
       txt_userName,
       txt_password,
     } = this.state;
+
 
     if (this.props.login.isLogin === true) {
       history.push('/');
@@ -109,9 +116,9 @@ class PageLogin extends Component {
                 <div className="text-center mt-5 text-small">
                   Copyright &copy; Your Company. Made with 💙 by Stisla
                     <div className="mt-2">
-                    <Link>Privacy Policy</Link>
+                    <Link to="#">Privacy Policy</Link>
                     <div className="bullet" />
-                    <Link>Terms of Service</Link>
+                    <Link to="#">Terms of Service</Link>
                   </div>
                 </div>
               </div>
@@ -147,6 +154,9 @@ const mapDisPatchToProps = (dispatch, props) => // save
   onLogin: (dataUserLogin) => {
     dispatch(actLoginReq(dataUserLogin));
   },
+  onGetMe: () => {
+    dispatch(getMeRequest())
+  }
 });
 
 export default connect(mapStateToProps, mapDisPatchToProps)(PageLogin);

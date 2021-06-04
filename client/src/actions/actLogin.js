@@ -1,23 +1,36 @@
 import * as TypesLogin from '../constants/ActionTypeLogin';
-import callApi from '../utils/ApiCaller';
+import callApi, { requestApiForm } from '../utils/ApiCaller';
+import { history } from '../store'
 
-export const actLogin = (dataUserLogin) => ({
+export const actLogin = (payload) => ({
   type: TypesLogin.USER_LOGIN,
-  dataUserLogin,
+  payload,
 });
 
 export const actLoginReq = (dataUserLogin) => (dispatch) => callApi('login', 'POST', dataUserLogin)
   .then((res) => {
-    console.log({res})
     dispatch(actLogin(res.data));
   });
 
-export const actRegister = (dataUserRegister) => ({
+export const actRegister = (payload) => ({
   type: TypesLogin.USER_REGISTER,
-  dataUserRegister,
+  payload,
 });
 
-export const actRegisterReq = (dataUserRegister) => (dispatch) => callApi('register', 'POST', dataUserRegister)
+export const actRegisterReq = (dataUserRegister) => (dispatch) => requestApiForm('register', 'POST', dataUserRegister)
   .then((res) => {
+    // eslint-disable-next-line no-console
     dispatch(actRegister(res.data));
+    history.push('/login')
+  });
+
+
+export const getMeAction = (payload) => ({
+  type: TypesLogin.GET_ME,
+  payload,
+});
+
+export const getMeRequest = () => (dispatch) => callApi('user/get-me', 'GET')
+  .then((res) => {
+    dispatch(getMeAction(res.data.data));
   });

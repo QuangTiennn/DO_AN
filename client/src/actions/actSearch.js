@@ -9,6 +9,5 @@ export const actSearchTour = (payload) => ({
 
 export const actionSearchOnTour = (q) => (dispatch) => callApi(`tour/get-all-tour?q=${q}`, 'GET')
   .then((res) => {
-    console.log(res.data)
     dispatch(actSearchTour(res.data));
   });

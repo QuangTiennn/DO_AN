@@ -22,8 +22,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const [state, setState] = useState({ keyword: '', statusDropdown: false })
 
-  const { login: { isLogin, dataUserLogin, token } } = useSelector(cS => cS)
+  const { login: { isLogin, dataUserLogin, token, profile } } = useSelector(cS => cS)
 
+  // eslint-disable-next-line no-console
+  console.log(profile, '<----');
   const handleOnChangeInput = (e) => {
     setState({
       [e.target.name]: e.target.value,
@@ -48,35 +50,34 @@ const Header = () => {
       );
     }
     return (
-      <Link
-        to="/"
+      <div
         className="dropdown-item has-icon text-danger"
         onClick={handleLogout}
       >
         <i className="fas fa-sign-out-alt" />
         Logout
-      </Link>
+      </div>
     );
   }
 
   const showUserIsLogin = (userIsLogin) => {
-    if (token) {
+    if (isLogin) {
       return (
         <>
-          Hi,
+          Hi
         </>
       );
     }
     return (
       <>
-        <img
+        {/* <img
           alt="image1"
           // src={`${USER_IMG}/${dataUserLogin.user.avatarUser}`}
           src="https://picsum.photos/200"
-          className="rounded-circle mr-1" />
+          className="rounded-circle mr-1" /> */}
         <div className="d-sm-none d-lg-inline-block">
           Hi,
-          {dataUserLogin.user.userName}
+          {profile.userName}
         </div>
       </>
     );
@@ -85,6 +86,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
+    this.props.history.push('/')
   }
 
   return (

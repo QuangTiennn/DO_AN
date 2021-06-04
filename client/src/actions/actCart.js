@@ -7,13 +7,23 @@ export const actAddToCart = (tour, quantity) => ({
   quantity, // quantity : quantity
 });
 
+
+
+
 export const actAddToCartAPI = () => {
 
 };
 
+
+export const actionBooking = (payload) => ({
+  type: TypesCart.BOOKING,
+  payload
+});
+
+
 export const actAddToCartAPIReq = (cart) => (dispatch) => callApi('add-to-cart', 'POST', cart)
   .then((res) => {
-    dispatch(actAddToCartAPI(res.data));
+    dispatch(actionBooking(res.data));
   });
 
 export const actDeleteTourInCart = (tour) => ({

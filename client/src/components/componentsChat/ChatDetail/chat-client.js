@@ -43,8 +43,6 @@ const ChatClient = () => {
 
   const socket = socketIOClient(ENDPOINT);
 
-  console.log({ currentUserState })
-
   useEffect(() => {
     socket.on('newMessage-server-sent', (arg) => {
       dispatch(saveMessAction(arg))

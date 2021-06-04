@@ -12,8 +12,6 @@ toast.configure({
   progress: undefined,
 });
 
-const Toastify = ({ msg = '', type }) => {
+export const Toastify = ({ msg = '', type }) => {
   return toast[type](msg);
 };
-
-export default Toastify;

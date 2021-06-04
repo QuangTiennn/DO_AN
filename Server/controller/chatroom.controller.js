@@ -29,7 +29,6 @@ module.exports.createChatRoom = async (req, res) => {
             })
         }
         const chatRoom = await ChatRoom.create(req.body);
-        console.log(chatRoom, '[Chat]');
         await User.findByIdAndUpdate(userID, {
             $set : {
                 chatRoomID : chatRoom._id

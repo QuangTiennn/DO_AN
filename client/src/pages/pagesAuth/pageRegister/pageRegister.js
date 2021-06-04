@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { actRegisterReq } from '../../../actions/actLogin';
 import './pageRegister.scss';
 
@@ -29,28 +28,22 @@ class PageRegister extends Component {
     const {
       txt_userName,
       txt_password,
-      txt_re_password,
       txt_email,
       txt_numberPhone,
     } = this.state;
 
-    const userRegister = {
-      userName: txt_userName,
-      password: txt_password,
-      // avatarUser: `${this.fileInput.current.files[0].name}`,
-      email: txt_email,
-      numberPhoneUser: txt_numberPhone,
-    };
-    const { history } = this.props;
-    const thisProps = this.props;
-    const myPromisRegisterUser = new Promise((myResolve, myRejcet) => {
-      thisProps.onRigisterUser(userRegister);
-      myResolve('aaaaaaaaaa');
-      myRejcet('bbbbbbbbbbbb');
-    });
-    myPromisRegisterUser.then(() => {
-      history.push('/login');
-    });
+
+    const bodyFormData = new FormData();
+
+    bodyFormData.append('avatar', this.fileInput.current.files[0]);
+    bodyFormData.append('password', txt_password);
+    bodyFormData.append('email', txt_email);
+    bodyFormData.append('numberPhoneUser', txt_numberPhone);
+    bodyFormData.append('userName', txt_userName);
+
+    this.props.onRegister(bodyFormData);
+    this.props.history.push('/login');
+
   }
 
   render() {
@@ -180,7 +173,7 @@ class PageRegister extends Component {
 }
 
 const mapDisPatchToProps = (dispatch, props) => ({
-  onRigisterUser: (userRegister) => {
+  onRegister: (userRegister) => {
     dispatch(actRegisterReq(userRegister));
   },
 });

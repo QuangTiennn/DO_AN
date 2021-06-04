@@ -5,6 +5,7 @@ import ChatClient from '../../components/componentsChat/ChatDetail/chat-client';
 import Footer from '../../components/componentsFE/footer/footer';
 import Header from '../../components/componentsFE/header/header';
 import { routes } from '../../routes';
+import { history } from '../../store';
 
 class rootFE extends Component {
   showContentMenu = (routes) => {
@@ -23,6 +24,9 @@ class rootFE extends Component {
   }
 
   render() {
+    // if(!this.props.login.token) {
+    //   history.push('/login')
+    // }
     return (
       <div>
         <Header />
