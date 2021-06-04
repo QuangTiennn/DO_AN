@@ -11,9 +11,19 @@ module.exports.getAllUser = async (req, res) => {
 };
 
 module.exports.getMe = async (req, res) => {
-    const userID = req.decode.id;
-    const user  = await User.findOne({_id : userID});
-    console.log(user, '[user]');
+    try {
+        const userID = req.decode.id;
+        const user  = await User.findOne({_id : userID});
+        res.status(200).json({
+            data : user,
+            message : "get me successfully"
+        })
+    } catch (error) {
+        res.status(400).json({
+            error,
+            message : "get me fail"
+        })
+    }
 }
 
 module.exports.addUser = async (req, res) => {
