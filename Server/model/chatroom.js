@@ -1,16 +1,17 @@
 var mongoose = require("mongoose");
 
 var ChatRoomSchema = mongoose.Schema({
-    type : {}, //group || 1 - 1
-    userID :{
-        type : mongoose.Schema.Types.ObjectId
+    type: {}, //group || 1 - 1
+    userID: {
+        ref: "User",
+        type: mongoose.Schema.Types.ObjectId
     },
-    messageID : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Message"
+    messageID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message"
     },
-    roomMaster : {
-        type : String
+    roomMaster: {
+        type: String
     }
 })
 

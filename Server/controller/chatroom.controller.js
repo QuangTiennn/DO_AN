@@ -4,7 +4,10 @@ const User = require("../model/user");
 module.exports.getAllRoom = async (req, res) => {
     let room = await ChatRoom.find()
         .populate({
-            path: "messageID"
+            path: "messages",
+        })
+        .populate({
+            path: 'userID'
         })
     res.json(room);
 }
@@ -30,13 +33,8 @@ module.exports.createChatRoom = async (req, res) => {
             userID
         } = req.body;
         const findUser = await User.findById(userID);
-        // if (findUser.chatRoomID === null || findUser.chatRoomID === undefined) {
-        //     res.status(400).json({
-        //         error,
-        //         message: "userID isn't valid"
-        //     })
-        // }
-        if (findUser.chatRoomID === null) {
+
+        if (findUser.chatRoomID !== null) {
             return res.status(400).json({
                 error: "",
                 message: "chat room is exists"
