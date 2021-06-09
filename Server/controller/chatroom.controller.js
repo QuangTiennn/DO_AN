@@ -18,7 +18,10 @@ module.exports.getChatRoomByID = async (req, res) => {
             _id: chatRoomID
         })
         .populate({
-            path: "messageID"
+            path: "messages",
+        })
+        .populate({
+            path: 'userID'
         })
         .then((chatroom) => {
             res.json(chatroom);
