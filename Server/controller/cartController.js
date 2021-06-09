@@ -24,7 +24,6 @@ module.exports.addToCart = async (req, res) => {
                 tourInCart: cart.tourInCart
             }
         }
-
         await Tour.findOneAndUpdate({ tourID: req.body.tourID }, { qtyPeople: +(currentQuality.qtyPeople) - (+req.body.QtyPeople) })
         res.json(cart).status(200);
     } else {
