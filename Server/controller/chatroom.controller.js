@@ -3,20 +3,28 @@ var ChatRoom = require("../model/chatroom");
 module.exports.getAllRoom = async (req,res) => {
     let room = await ChatRoom.find()
     .populate({path : "userID"})
-    .exec();
+        .exec();
+    if (!room) {
+        res.status(200).json({
+            payload: false,
+            message : "room is not exists"
+        })
+    }
     res.json(room);
 }
 
 module.exports.getChatRoomByID = async (req, res) => {4
     let userID = req.body.userID;
-    await ChatRoom.findOne({userID : userID })
-    .populate({ path: "userID" })
-    .then((chatroom)=> {
-        res.json(chatroom);
-    })
-    .catch((err)=> {
-        res.status(400).send(err);
-    })
+    const room = await ChatRoom.findOne({ userID: userID })
+        .populate({ path: "userID" });
+    if (!room) {
+        res.status(200).json({
+            payload: false,
+            message : "room is not exists"
+        })
+    }
+    res.status(200).json(room);
+    
 }
 module.exports.createChatRoom = async (req, res) => {
     try {
