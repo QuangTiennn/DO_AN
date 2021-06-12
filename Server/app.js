@@ -84,7 +84,7 @@ mongoose.connect(process.env.MONGO_URL,{
             //server send data to client
             io.emit("newMessage-server-sent",{
                 data : dataNewMessage, 
-                id : socket.id
+                id: socket.id
             });
             let userIDSendMsg = dataNewMessage.userID;
             findChatExist = async() => {
@@ -92,7 +92,7 @@ mongoose.connect(process.env.MONGO_URL,{
                 if(userIDExists) {
                     await ChatRoom.findOneAndUpdate({userID : userIDSendMsg}, {
                         $push : {
-                            messages : dataNewMessage.data
+                            message : dataNewMessage.data
                         }
                     })
                 } else {

@@ -38,15 +38,21 @@ module.exports.addTour = async (req, res) => {
     }
 };
 
-module.exports.getTourID = (req, res) => {
-    let tourID = req.params.tourID;
-    Tour.findOne({ _id: tourID })
-        .then((tour) => {
-            res.json(tour)
-        })
-        .catch((err) => {
-            res.status(400).send(err)
-        })
+module.exports.getTourID = async (req, res) => {
+    try {
+        let tourID = req.params.tourID;
+        const tour = await Tour.findOne({ _id: tourID })
+        res.status(200).json({
+            data: tour,
+            message : "get tour success"
+        }) 
+       
+    } catch (error) {
+        res.status(400).json({
+            error,
+            message : "get tour fail"
+        }) 
+    }
 }
 
 module.exports.updateTour = (req, res) => {
