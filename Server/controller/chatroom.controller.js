@@ -3,18 +3,15 @@ var ChatRoom = require("../model/chatroom");
 module.exports.getAllRoom = async (req,res) => {
     let room = await ChatRoom.find()
     .populate({path : "userID"})
-    .populate({ path: "messageID" })
     .exec();
     res.json(room);
 }
 
 module.exports.getChatRoomByID = async (req, res) => {4
-    let chatRoomID = req.params.id;
-    await ChatRoom.findOne({_id : chatRoomID })
+    let userID = req.body.userID;
+    await ChatRoom.findOne({userID : userID })
     .populate({ path: "userID" })
-    .populate({ path: "messageID" })
     .then((chatroom)=> {
-        console.log(chatroom, '[chatroom]');
         res.json(chatroom);
     })
     .catch((err)=> {

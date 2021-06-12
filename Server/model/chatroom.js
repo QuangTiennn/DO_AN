@@ -2,7 +2,11 @@ var mongoose = require("mongoose");
 
 var ChatRoomSchema = mongoose.Schema({
     type: {}, //group || 1 - 1
-    userID : mongoose.Schema.Types.ObjectId,
+    userID: {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
+        trim : true
+    },
     message: [
         {
             userID: {
