@@ -92,7 +92,10 @@ mongoose.connect(process.env.MONGO_URL,{
                 if(userIDExists) {
                     await ChatRoom.findOneAndUpdate({userID : userIDSendMsg}, {
                         $push : {
-                            message : dataNewMessage.data
+                            message: {
+                                userID: dataNewMessage.userID,
+                                content : dataNewMessage.message
+                            }
                         }
                     })
                 } else {
