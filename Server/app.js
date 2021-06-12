@@ -86,60 +86,29 @@ mongoose.connect(process.env.MONGO_URL,{
                 data : dataNewMessage, 
                 id : socket.id
             });
-            // let message = new Message({
-            //     chatroomID : dataNewMessage.chatRoomID,
-            //     userID : dataNewMessage.userID,
-            //     messages : dataNewMessage.data
-            // });
-            // let userIDSendMsg = dataNewMessage.userID;
-            // findMsgExist = async() => {
-            //     let userIDExists = await Message.findOne({userID : userIDSendMsg})
-            //     if(userIDExists) {
-            //         await Message.findOneAndUpdate({userID : userIDSendMsg}, {
-            //             $push : {
-            //                 messages : dataNewMessage.data
-            //             }
-            //         })
-            //     }else {
-            //         message.save((err)=>{
-            //             if(err){
-            //                 console.log(err, '[err]');
-            //             }
-            //         });
-            //     }
-            // }
-            // findMsgExist();
-            // //create chatroom
-            // createChatRoom = async () => {
-            //     let room = new ChatRoom({
-            //         messageID : message._id,
-            //         userID : dataNewMessage.userID,
-            //         roomMaster : "Admin"
-            //     });
-            //     let userIDExists = room.userID;
-            //     //check room exists ?
-            //     let checkRoomExists = await ChatRoom.findOne({userID : userIDExists})
-            //     if(!checkRoomExists){
-            //         room.save((err)=> {
-            //             if(err) console.log(err, '[err]');
-            //         })
-            //     }else{
-            //         ChatRoom.findByIdAndUpdate({userID : userIDExists}, {
-            //             $push: {
-            //                 messageID : [{
-            //                     messageID : message._id
-            //                 }],
-            //                 userID : [{
-            //                     userID : dataNewMessage.userID
-            //                 }]
-            //             }
-            //         })
-            //         console.log("room already", '["room already"]');
-            //     }
-            // }
-            // createChatRoom();
+            let userIDSendMsg = dataNewMessage.userID;
+            findChatExist = async() => {
+                let userIDExists = await ChatRoom.findOne({userID : userIDSendMsg})
+                if(userIDExists) {
+                    await ChatRoom.findOneAndUpdate({userID : userIDSendMsg}, {
+                        $push : {
+                            messages : dataNewMessage.data
+                        }
+                    })
+                } else {
+                    await ChatRoom.create({
+                        userID: userIDSendMsg,
+                        message: [
+                            {
+                                userID: userIDSendMsg,
+                                content : dataNewMessage.message
+                            }
+                        ]
+                    })
+                }
+            }
+            findChatExist();
         })  
-        
         socket.on('sendMessage', (message,callback) => {
             callback();
         });
