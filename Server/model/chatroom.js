@@ -8,6 +8,7 @@ var ChatRoomSchema = mongoose.Schema({
         ref : "User",
         trim : true
     },
+    inRoom : mongoose.Schema.Types.ObjectId,
     message: [
         {
             userID: {
