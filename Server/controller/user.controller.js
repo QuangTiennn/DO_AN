@@ -58,7 +58,6 @@ module.exports.getUserID = (req, res) => {
 module.exports.updateUser = async (req, res) => {
     let userID  = req.params.userID;
     let updateUser = req.body;
-    req.body.avatar = req.file.filename;
     User.findByIdAndUpdate({_id : userID}, {$set : updateUser})
     .then((user) => {
         res.json(user);
