@@ -14,7 +14,7 @@ module.exports.getAllRoom = async (req,res) => {
 }
 
 module.exports.getChatRoomByID = async (req, res) => {4
-    let userID = req.body.userID;
+    let userID = req.params.id;
     const room = await ChatRoom.findOne({ userID: userID })
         .populate({ path: "userID" });
     if (!room) {
