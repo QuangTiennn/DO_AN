@@ -58,13 +58,13 @@ mongoose.connect(process.env.MONGO_URL,{
         res.render("index.html");
     });
 
+    app.use("/api/storages" , storageRouter);
     app.use("/api" ,authRouter);
     app.use("/api",  verifyToken ,cartRouter);
     app.use("/api/tour",  verifyToken ,tourRouter);
     app.use("/api/user", verifyToken ,userRouter);
     app.use("/api/transport",  verifyToken ,transportRouter);
     app.use("/api/employee", verifyToken , employeeRouter);
-    app.use("/api/storages", verifyToken , storageRouter);
     app.use("/api/chat/",  verifyToken ,chatRouter)
     app.use("/api/customer/",  verifyToken ,customerRouter)
 
