@@ -14,8 +14,8 @@ module.exports.getAllRoom = async (req,res) => {
 }
 
 module.exports.getChatRoomByID = async (req, res) => {4
-    let userID = req.params.id;
-    const room = await ChatRoom.findOne({ userID: userID })
+    let chatroomID = req.params.id;
+    const room = await ChatRoom.findOne({ _id: chatroomID })
         .populate({ path: "userID" });
     if (!room) {
         res.status(200).json({})
