@@ -41,6 +41,7 @@ module.exports.getEmployeeID = (req, res) => {
 module.exports.updateEmployee = (req, res) => {
     let employeeID  = req.params.employeeID;
     let updateEmployee = req.body;
+    req.body.avatar = req.file.filename;
     Employee.findByIdAndUpdate({_id : employeeID}, {$set : updateEmployee})
     .then((employee) => {
         res.json(employee);
