@@ -18,10 +18,7 @@ module.exports.getChatRoomByID = async (req, res) => {4
     const room = await ChatRoom.findOne({ userID: userID })
         .populate({ path: "userID" });
     if (!room) {
-        res.status(200).json({
-            payload: false,
-            message : "room is not exists"
-        })
+        res.status(200).json({})
     }
     res.status(200).json(room);
     
