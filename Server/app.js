@@ -1,4 +1,4 @@
-require ("dotenv").config();
+require("dotenv").config();
 
 const express = require("express");
 const app = express();
@@ -11,7 +11,7 @@ const io = require("socket.io")(PORT, {
 });
 
 const tourRouter = require("./router/router.tour");
-const userRouter =  require("./router/router.user");
+const userRouter = require("./router/router.user");
 const transportRouter = require("./router/router.transport");
 const employeeRouter = require("./router/router.employee");
 const authRouter = require("./router/router.auth");
@@ -29,46 +29,45 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 const verifyToken = require("./middleware/auth");
-mongoose.connect(process.env.MONGO_URL,{
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(function(){
+}).then(function () {
     const port = process.env.PORT || 9000;
     app.use(cors({
         origin: 'http://localhost:3000'
     }
     ));
-    app.use(bodyParser.json({limit: '50mb'}));
+    app.use(bodyParser.json({ limit: '50mb' }));
     app.use(
         bodyParser.urlencoded({
-            extended : true
+            extended: true
         })
     );
 
     app.use(express.static("public/uploads/"));
     app.use(morgan("dev"));
     app.use(session({
-        resave: true, 
-        saveUninitialized: true, 
-        secret: 'somesecret', 
+        resave: true,
+        saveUninitialized: true,
+        secret: 'somesecret',
         cookie: { maxAge: 60000 }
     }))
 
-    app.get("/",(req,res)=> {
+    app.get("/", (req, res) => {
         res.render("index.html");
     });
 
-    app.use("/api" ,authRouter);
-    app.use("/api",  verifyToken ,cartRouter);
-    app.use("/api/tour",  verifyToken ,tourRouter);
-    app.use("/api/user", verifyToken ,userRouter);
-    app.use("/api/transport",  verifyToken ,transportRouter);
-    app.use("/api/employee", verifyToken , employeeRouter);
-    app.use("/api/storages", verifyToken , storageRouter);
-    app.use("/api/chat/",  verifyToken ,chatRouter)
-    app.use("/api/customer/",  verifyToken ,customerRouter)
+    app.use("/api", authRouter);
+    app.use("/api", verifyToken, cartRouter);
+    app.use("/api/tour", verifyToken, tourRouter);
+    app.use("/api/user", verifyToken, userRouter);
+    app.use("/api/transport", verifyToken, transportRouter);
+    app.use("/api/employee", verifyToken, employeeRouter);
+    app.use("/api/storages", verifyToken, storageRouter);
+    app.use("/api/chat/", verifyToken, chatRouter)
+    app.use("/api/customer/", verifyToken, customerRouter)
 
-    
 
     //create connect between client & server
     io.on("connection", (socket) => {
@@ -80,22 +79,41 @@ mongoose.connect(process.env.MONGO_URL,{
         })
         // server listen data from client
         socket.on("newMessage-client-sent", dataNewMessage => {
-            console.log(dataNewMessage, '[dataNewMessage]');
-            //server send data to client
-            io.emit("newMessage-server-sent",{
-                data : dataNewMessage, 
+            io.emit("newMessage-server-sent", {
+                data: dataNewMessage,
                 id: socket.id
             });
+
             let userIDSendMsg = dataNewMessage.userID;
-            findChatExist = async() => {
-                let userIDExists = await ChatRoom.findOne({ userID: userIDSendMsg })
-                let chatroomExists = await ChatRoom.findOne({_id : dataNewMessage.chatRoomId})
-                if(userIDExists || chatroomExists) {
-                    await ChatRoom.findOneAndUpdate({userID : userIDSendMsg}, {
-                        $push : {
+
+            /* 
+            // 1 - client || 0 : admin
+                client: 	userID: currentUserId,
+                clientId: currentUserId,
+                message: messageInput,
+                role:1
+
+            --- admin : 
+                userID: id,
+                adminId: currentAdminId,
+                message: messageInput,
+                chatroomId,
+                role: 0
+            */
+
+            findChatExist = async () => {
+                let userIDExists = await ChatRoom.findOne({ userID: userIDSendMsg }); // -> find key temp
+
+                let chatroomExists = await ChatRoom.findOne({ _id: dataNewMessage.chatRoomId })
+
+                if (userIDExists  || chatroomExists) {
+                    const flag = dataNewMessage.role === 1  ? dataNewMessage.clientId  : dataNewMessage.adminId;
+                    console.log(flag)
+                    await ChatRoom.findOneAndUpdate({ userID: userIDSendMsg }, {
+                        $push: {
                             message: {
-                                userID: dataNewMessage.userID,
-                                content : dataNewMessage.message
+                                userID: flag,
+                                content: dataNewMessage.message
                             }
                         }
                     })
@@ -105,20 +123,20 @@ mongoose.connect(process.env.MONGO_URL,{
                         message: [
                             {
                                 userID: userIDSendMsg,
-                                content : dataNewMessage.message
+                                content: dataNewMessage.message
                             }
                         ]
                     })
                 }
             }
             findChatExist();
-        })  
-        socket.on('sendMessage', (message,callback) => {
+        })
+        socket.on('sendMessage', (message, callback) => {
             callback();
         });
     })
 
-    PORT.listen(port,()=>{
+    PORT.listen(port, () => {
         console.log("app is running with port " + port);
     });
 });
