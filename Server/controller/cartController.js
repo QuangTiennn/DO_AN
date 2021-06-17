@@ -75,3 +75,34 @@ module.exports.addToCart = async (req, res) => {
     }
 }
 
+module.exports.deleteCart = async (req, res) => {
+    try {
+        const {userID , tourID} = req.body;
+        const checkCartExists = await Cart.findOne({ userID });
+        if (!checkCartExists) {
+            return res.status(400).json({
+                error: "",
+                payload: false,
+                message: "member does not exist"
+            })
+        }
+        const test = await Cart.findOneAndUpdate({ userID }, {
+            $pull: {
+                tourInCart: {
+                    tourID : tourID
+                }
+            }
+        })
+        res.status(200).json({
+            payload : true,
+            message : "delete cart successfully"
+        })
+    } catch (error) {
+        console.log(error, '[error]');
+        return res.status(400).json({
+            error,
+            message: "delete fail !",
+        });
+    }
+}
+
