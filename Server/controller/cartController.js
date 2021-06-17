@@ -21,8 +21,7 @@ module.exports.getCartByUser = async (req, res) => {
         .then((cart) => {
             res.status(200);
             res.json({
-                data: cart,
-                payload : true,
+                payload : cart,
                 message: "successfully !",
             });
         })
