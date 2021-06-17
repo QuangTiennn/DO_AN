@@ -8,11 +8,14 @@ var CartSchema = new mongoose.Schema({
         type : String,
         ref : "User"
     },
-    customerID : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Customer"
-    },
-    tourInCart : [],
+    tourInCart: [
+        {
+            tourID: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref : "Tour"
+            }
+        }
+    ],
     dateCreateCart : {
         type : Date,
         default : Date.now
