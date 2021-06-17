@@ -60,8 +60,8 @@ mongoose.connect(process.env.MONGO_URL, {
 
     app.use("/api/storages", storageRouter);
     app.use("/api", authRouter);
+    app.use("/api/tour", tourRouter);
     app.use("/api", verifyToken, cartRouter);
-    app.use("/api/tour", verifyToken, tourRouter);
     app.use("/api/user", verifyToken, userRouter);
     app.use("/api/transport", verifyToken, transportRouter);
     app.use("/api/employee", verifyToken, employeeRouter);

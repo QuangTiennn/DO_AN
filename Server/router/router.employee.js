@@ -15,7 +15,7 @@ const upload =  multer({storage : storage});
 router.get("/get-all-employee", employeeController.getAllEmployee);
 router.post("/add-employee",upload.single("avatar") ,employeeController.addEmployee);
 router.get("/get-employeeid/:employeeID", employeeController.getEmployeeID);
-router.put("/update-employee/:employeeID", upload.single("avatar") , hasAdmin,employeeController.updateEmployee);
+router.put("/update-employee/:employeeID", hasAdmin,employeeController.updateEmployee);
 router.delete("/delete-employee/:employeeID", hasAdmin ,employeeController.deleteEmployee);
 
 module.exports = router;
