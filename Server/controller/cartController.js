@@ -3,6 +3,8 @@ const Tour = require("../model/tour");
 
 module.exports.getCart = (req, res) => {
     let cart = Cart.find()
+        .populate({ path: "userID" })
+        .populate({ path: "tourInCart.tourID" })
         .then((cart) => {
             res.status(200);
             res.json(cart);
@@ -11,33 +13,6 @@ module.exports.getCart = (req, res) => {
             res.status(400).send(err);
         })
 }
-
-// module.exports.addToCart = async (req, res) => {
-//     let cart = new Cart(req.body);
-//     console.log(req.body.tourID, '[req.body]');
-//     let userID = req.body.userID;
-//     let checkCartExiste = await Cart.findOne({ userID });
-//     let currentQuality = await Tour.findOne({ _id: req.body.tourID })
-//     if (checkCartExiste) {
-//         await Cart.findOneAndUpdate({ userID }), {
-//             $push: {
-//                 tourInCart: req.body.tourID
-//             }
-//         }
-//         await Tour.findOneAndUpdate({ tourID: req.body.tourID }, { qtyPeople: +(currentQuality.qtyPeople) - (+req.body.QtyPeople) })
-//         res.json(cart).status(200);
-//     } else {
-//         cart.save()
-//             .then((cart) => {
-//                 res.status(200)
-//                 res.json(cart)
-//             })
-//             .catch((err) => {
-//                 res.status(400).send(err)
-//             })
-//     }
-// }
-
 module.exports.addToCart = async (req, res) => {
     try {
         let userID = req.body.userID;
