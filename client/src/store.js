@@ -1,23 +1,12 @@
-import { createStore, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { createBrowserHistory } from 'history';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 import rootReducer from './reducers/index';
-// giá trị trả về từ combineReducers
-const persistConfig = {
-  key: 'root',
-  storage,
-};
 
 export const history = createBrowserHistory();
 
-const pReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = createStore(
-  pReducer,
+  rootReducer,
   composeWithDevTools(applyMiddleware(ReduxThunk)),
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
-export const persistor = persistStore(store);

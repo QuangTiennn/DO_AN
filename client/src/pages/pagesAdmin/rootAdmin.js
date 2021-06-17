@@ -6,9 +6,6 @@ import SideBar from '../../components/componentsAdmin/sidebar/sidebar';
 import NavBar from '../../components/componentsAdmin/navbar/navbar';
 
 class rootAdmin extends Component {
-  constructor(props) {
-    super(props);
-  }
 
     showContentMenu = (routesAdmin) => {
       let result = null;
@@ -26,7 +23,7 @@ class rootAdmin extends Component {
     }
 
     render() {
-      if (this.props.login.isLogin == true) {
+      if (this.props.login.token) {
         return (
           <div>
             <NavBar />

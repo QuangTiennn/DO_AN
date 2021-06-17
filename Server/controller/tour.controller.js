@@ -52,8 +52,7 @@ module.exports.getTourID = (req, res) => {
 module.exports.updateTour = (req, res) => {
     let tourID = req.params.tourID;
     let updateTour = req.body;
-    console.log(updateTour, '[updateTour]');
-    req.body.avatar = req.file.filename;
+    // req.body.avatar = req.file.filename;
     Tour.findByIdAndUpdate({ _id: tourID }, { $set: updateTour })
     .then((tour) => {
         res.json(tour);

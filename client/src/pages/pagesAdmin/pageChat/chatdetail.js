@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { actFetchChatRoomByIDReq } from '../../../actions/actChat';
-import { USER_IMG } from '../../../constants/Service';
+import React, { memo, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import socketIOClient from "socket.io-client";
 
+
+const ENDPOINT = 'http://localhost:9000';
+const socket = socketIOClient(ENDPOINT);
 
 const ChatDetail = () => {
   const [state, setState] = useState({
@@ -14,77 +16,127 @@ const ChatDetail = () => {
   });
 
   const { chatRoom: { chatRooms },
-  login: { dataUserLogin: { user } },
-  currentUserState } = useSelector(currentState => currentState)
+    login: { dataUserLogin: { user } },
+    chatRoom: { messages },
+    messageTempState: { listMessages },
+  } = useSelector(currentState => currentState)
 
+  const currentUserId = user?._id
 
-  const showMsg = (msg) => {
-    let result = null;
-    const arrMsg = msg.messageID.messages;
-    result = arrMsg.map((msgItem, index) => {
-      if (msgItem !== undefined) {
-        return (
-          <div className="chat-area-main">
-            <div className="chat-msg">
-              <div className="chat-msg-profile">
-                <img
-                  className="chat-msg-img"
-                  src={`${USER_IMG}/${msg.userID.avatarUser}`}
-                  alt=""
-                />
-                <div className="chat-msg-date">
-                  message was sent at
-                  {msg.messageID.TimeSendMessage}
-                </div>
-              </div>
-              <div className="chat-msg-content" key={index}>
-                <div className="chat-msg-text">{msgItem}</div>
-              </div>
-            </div>
-            <div className="chat-msg owner">
-              <div className="chat-msg-profile">
-                <img
-                  className="chat-msg-img"
-                  src={`${USER_IMG}/${user.avatarUser}`}
-                  alt=""
-                />
-                <div className="chat-msg-date">Message seen 2.50pm</div>
-              </div>
-              <div className="chat-msg-content">
-                <div className="chat-msg-text">
-                  Tincidunt arcu non sodales😂
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
+  useEffect(() => {
+    socket.on('newMessage-server-sent', (data) => {
+      // console.log({ data }, 'admin')
     });
-    return result;
-  };
+  }, [])
 
   const handleInputOnChange = (e) => {
-    setState({
-      [e.target.name]: e.target.value,
-    });
+    setState(() => ({ [e.target.name]: e.target.value }));
   };
 
   const handleOnclickSendMsg = () => {
-
+    socket.emit("newMessage-client-sent", {
+      id: currentUserId,
+      message: state.messageInput
+    })
   };
+
+  console.log({ listMessages }, '<--admin--');
+
   return (
     <div className="chat-area">
       <div className="chat-area-header">
-        <img
+        {/* <img
           className="chat-msg-img"
           // src={`${USER_IMG}/${listChatDetail.userID.avatarUser}`}
           alt=""
-        />
+        /> */}
         <div className="chat-area-title">
           {/* {listChatDetail.userID.userName} */}
         </div>
       </div>
-      {/* {showMsg(listChatDetail)} */}
+      {
+        messages && Object.keys(messages) && messages?.messages.map((mess) => {
+          const { content, userID } = mess
+          return (
+            <>
+              {
+                currentUserId !== userID._id ? (
+                  <div className="client-mess profile my-profile px-2">
+                    <div className="">
+                    </div>
+                    <div className="message my-message p-2 mb-2"
+                      style={{
+                        background: 'lightblue',
+                        display: 'inline'
+                      }}
+                    > {content} </div>
+                  </div>
+                ) : (
+                  <div className="admin-mess text-right px-2 mb-3">
+                    <div className="profile other-profile">
+                      {/* <img src="https://i.pravatar.cc/30"
+                                      style={{ borderRadius: '50%' }}
+                                      width="30" height="30" alt="" />
+                                    <span>Admin</span> */}
+                    </div>
+                    <div className="message other-message box-chat-admin text-white p-2"
+                      style={{
+                        background: 'gray',
+                        display: 'inline'
+                      }}
+                    >{content}</div>
+                  </div>
+                )
+              }
+
+
+            </>
+          )
+        })
+      }
+
+
+      {
+        listMessages && Object.keys(listMessages) && listMessages.map((mess) => {
+          const { message, id } = mess
+          return (
+            <div key={id}>
+              {
+                currentUserId === id ? (
+                  <div className="client-mess profile my-profile px-2">
+                    <div className="">
+                    </div>
+                    <div className="message my-message p-2 mb-2"
+                      style={{
+                        background: 'lightblue',
+                        display: 'inline'
+                      }}
+                    > {message} </div>
+                  </div>
+                ) : (
+                  <div className="admin-mess text-right px-2 mb-3">
+                    <div className="profile other-profile">
+                    </div>
+                    {
+                      message && (
+                        <div className="message other-message box-chat-admin text-white p-2"
+                          style={{
+                            background: 'gray',
+                            display: 'inline'
+                          }}
+                        >{message}</div>
+                      )
+                    }
+                  </div>
+                )
+              }
+
+
+            </div>
+          )
+        })
+      }
+
       <div className="chat-area-footer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -197,4 +249,4 @@ const ChatDetail = () => {
   );
 }
 
-export default ChatDetail;
+export default memo(ChatDetail);

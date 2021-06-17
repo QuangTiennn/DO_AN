@@ -1,7 +1,6 @@
 
-import { history } from '../store'
 
-import Toastify from '../utils/toastify'
+import { Toastify } from '../utils/toastify'
 
 import * as Types from '../constants/ActionTypeTour';
 

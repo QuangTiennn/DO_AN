@@ -7,8 +7,23 @@ export default function callApi(endpoint, method = 'GET', body) {
     url: `${config.API_URL}/${endpoint}`,
     data: body,
     headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      Authorization: 'mySecret',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+  })
+    .catch((err) => {
+      throw err;
+    });
+}
+
+
+export const requestApiForm = (endpoint, method = 'GET', body) => {
+  return axios({
+    method,
+    url: `${config.API_URL}/${endpoint}`,
+    data: body,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data"
     },
   })
     .catch((err) => {

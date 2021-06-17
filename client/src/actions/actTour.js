@@ -43,6 +43,8 @@ export const getTourByIdAction = (tour) => ({
 
 export const getTourById = (_id) => (dispatch) => callApi(`tour/get-tourid/${_id}`, 'GET')
   .then((res) => {
+      // eslint-disable-next-line no-console
+    console.log(res.data, '<----');
     dispatch(getTourByIdAction(res.data));
   })
   .catch((err) => {

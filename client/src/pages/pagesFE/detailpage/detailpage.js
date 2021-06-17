@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import { getTourById } from '../../../actions/actTour';
+import { actAddToCartAPIReq } from '../../../actions/actCart';
 import { TOUR_IMG } from '../../../constants/Service';
 
 import AppNotFound from '../../../components/AppNotFound'
@@ -20,9 +21,9 @@ const DetailPage = () => {
     dispatch(getTourById(tourID))
   }, [dispatch, tourID])
 
-  const { tourState } = useSelector((cS) => cS)
+  const { tourState = {} } = useSelector((cS) => cS)
 
-  const { singleTour: _tour } = tourState
+  const { singleTour: _tour } = tourState || {}
 
   const showDetailTour = (tour) => {
     if (tour) {
@@ -64,6 +65,11 @@ const DetailPage = () => {
 
   }
 
+
+  const onHandleAdd = () => {
+    dispatch(actAddToCartAPIReq(_tour))
+  }
+
   if (!_tour) return <AppNotFound />
 
   return (
@@ -73,6 +79,7 @@ const DetailPage = () => {
         <div className="btn-order-tour">
           <Button
             variant="warning"
+            onClick={onHandleAdd}
           >
             Add To Cart
               </Button>
