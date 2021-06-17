@@ -81,8 +81,10 @@ const HomePage = () => {
 
   const renderAllTour = () => {
     let result = null;
+    console.log(listTour, '[listTour]');
     if (listTour.length) {
       result = listTour.map((tour, index) => {
+        console.log(tour, '[tour]');
         if (tour !== undefined) {
           return (
             // eslint-disable-next-line react/no-array-index-key
@@ -90,7 +92,7 @@ const HomePage = () => {
               <div className="our-tour-item">
                 <div className="img-tour-item">
                   <NavLink className="navLink" to={`/detail-tour/${tour._id}`}>
-                    <img src={`${TOUR_IMG}/${tour.avatarTour}`} alt="" />
+                    <img src={`${TOUR_IMG}/${tour.avatar}`} alt="" />
                   </NavLink>
                 </div>
                 <div className="name-tour">

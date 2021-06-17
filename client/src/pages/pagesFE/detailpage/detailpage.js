@@ -32,7 +32,7 @@ const DetailPage = () => {
             <legend>{tour.tourName}</legend>
           </div>
           <div className="img-detail-tour">
-            <img src={`${TOUR_IMG}/${tour.avatarTour}`} alt="" />
+            <img src={`${TOUR_IMG}/${tour.avatar}`} alt="" />
           </div>
           <div className="description-detail-tour">
             <div className="description-detail">

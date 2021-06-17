@@ -13,6 +13,7 @@ module.exports.getAllUser = async (req, res) => {
 module.exports.getMe = async (req, res) => {
     try {
         const userID = req.decode.id;
+        console.log(userID, '[userID]');
         const user  = await User.findOne({_id : userID});
         res.status(200).json({
             data : user,
